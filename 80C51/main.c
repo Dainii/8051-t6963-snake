@@ -1,4 +1,5 @@
 #include <mcs51reg.h>
+#include <time.h>
 #include "stdio-t6963c.h"
 #include "test.h"
 #include "buffer.h"
@@ -39,7 +40,7 @@ void play() {
 }
 
 void main(void) {
-
+   
 	initialize();
 	play();
 
@@ -52,11 +53,11 @@ void main(void) {
 	int testsInError = 0;
 	STDIO_initialize();
 
-	testsInError += testBuffer();
-	testsInError += testSnake();
-	testsInError += testKeyboard();
+	// testsInError += testBuffer();
+	// testsInError += testSnake();
+	// testsInError += testKeyboard();
 	testsInError += testFruit();
-	testsInError += testGameboard();
+	// testsInError += testGameboard();
 
 	printf("%d tests en erreur", testsInError);
 
