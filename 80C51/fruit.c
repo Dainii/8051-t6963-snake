@@ -4,6 +4,7 @@
 #include "t6963c.h"
 #include "gameboard.h"
 #include "test.h"
+#include "rand.h"
 
 /**
  * Place un fruit à la position indiquée.
@@ -13,7 +14,15 @@
  * le paramètre est mis à jour avec la position effective du fruit.
  */
 void FRUIT_placeInFreeSpace(Position *position) {
-	// À faire.
+   char c = T6963C_readFrom(position->x, position->y);
+   
+   if(c != EMPTY){
+      position->x = rand_interval(SNAKE_LIMIT_X0,SNAKE_LIMIT_X1);
+      FRUIT_placeInFreeSpace(position);
+   }
+   
+   T6963C_writeAt(position->x, position->y, FRUIT);
+
 }
 
 /**
@@ -24,7 +33,8 @@ void FRUIT_placeInFreeSpace(Position *position) {
  * @param position Paramètre de sortie, avec la position du fruit.
  */
 void FRUIT_random(Position *position) {
-	// À faire.
+   position->x = rand_interval(SNAKE_LIMIT_X0,SNAKE_LIMIT_X1);
+   position->y = rand_interval(SNAKE_LIMIT_Y0,SNAKE_LIMIT_Y1);
 }
 
 /**
