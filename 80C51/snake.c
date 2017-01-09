@@ -12,7 +12,31 @@
  * @param snake La description du serpent.
  */
 void SNAKE_move(Snake *snake) {
-	// ï¿½ faire
+	// Garde en mémoire l'ancienne position
+	BUFFER_in(snake->position.x);
+	BUFFER_in(snake->position.y);
+
+	// Modifie en fonction de la direction du snake
+	switch (snake->direction) {
+		case MOVES_UP :
+			snake->position.y--;
+			break;
+
+		case MOVES_DOWN :
+			snake->position.y++;
+			break;
+
+		case MOVES_LEFT :
+			snake->position.x--;
+			break;
+
+		case MOVES_RIGHT :
+			snake->position.x++;
+			break;
+
+		default: 
+			break;
+	}
 }
 
 /**
@@ -23,7 +47,27 @@ void SNAKE_move(Snake *snake) {
 void SNAKE_liveOrDie(Snake *snake) {
 	unsigned char c = T6963C_readFrom(snake->position.x, snake->position.y);
 
-	// ï¿½ faire.
+	switch (c) {
+		case OBSTACLE_A:
+		case OBSTACLE_B:
+		case OBSTACLE_C:
+		case OBSTACLE_D:
+		case OBSTACLE_E:
+		case OBSTACLE_F:
+		case OBSTACLE_G:
+		case OBSTACLE_H:
+		case SNAKE_BODY:  
+			snake->status = DEAD;
+			break;
+
+		case FRUIT :
+			snake->status = EATING;
+			snake->caloriesLeft += FRUIT_CALORIES;
+			break;
+
+		default: 
+			snake->status = ALIVE;
+	}
 }
 
 /**
@@ -31,7 +75,12 @@ void SNAKE_liveOrDie(Snake *snake) {
  * @param snake La dï¿½finition du serpent.
  */
 void SNAKE_showHead(Snake *snake) {
-	// ï¿½ faire.
+	if (snake->status == DEAD){
+		T6963C_writeAt(snake->position.x, snake->position.y, SNAKE_DEAD);
+	} 
+	if (snake->status == ALIVE){
+		T6963C_writeAt(snake->position.x, snake->position.y, SNAKE_HEAD);
+	}
 }
 
 /**
@@ -40,7 +89,21 @@ void SNAKE_showHead(Snake *snake) {
  * @param snake La dï¿½finition du serpent.
  */
 void SNAKE_showBody(Snake *snake) {
-	// ï¿½ faire.
+	// On commence par remplacer la tête par le corps
+	 if (snake->status == EATING){
+	    T6963C_writeAt(snake->position.x, snake->position.y, SNAKE_SWALLOW);
+	 } else {
+	    T6963C_writeAt(snake->position.x, snake->position.y, SNAKE_BODY);
+	 }
+	
+	// Efface la queue
+	if (snake->caloriesLeft == 0){
+		T6963C_writeAt(BUFFER_out(), BUFFER_out(), EMPTY);
+	}	
+	
+	if (snake->caloriesLeft != 0){
+	    snake->caloriesLeft --;
+	}
 }
 
 /**
@@ -50,7 +113,34 @@ void SNAKE_showBody(Snake *snake) {
  * @param arrow La direction dï¿½sirï¿½e.
  */
 void SNAKE_turn(Snake *snake, Arrow arrow) {
-	// ï¿½ faire.
+	switch (arrow) {
+		case ARROW_RIGHT :
+			if (snake->direction != MOVES_LEFT){
+				snake->direction = MOVES_RIGHT;
+			}
+			break;
+
+		case ARROW_LEFT :
+			if (snake->direction != MOVES_RIGHT){
+				snake->direction = MOVES_LEFT;
+			}
+			break;
+
+		case ARROW_UP :
+			if (snake->direction != MOVES_DOWN){
+				snake->direction = MOVES_UP;
+			}
+			break;
+
+		case ARROW_DOWN :
+			if (snake->direction != MOVES_UP){
+				snake->direction = MOVES_DOWN;
+			}
+			break;
+
+		default: 
+			break;
+	}
 }
 
 /**
@@ -321,7 +411,7 @@ int testSnake() {
 	// Tests unitaires:
 	testsInError += testSnakeTurns();
 	testsInError += testSnakeMoves();
-	testsInError += testSnakeHitsABorder();
+	// testsInError += testSnakeHitsABorder();
 	testsInError += testSnakeEatsAFruit();
 
 	// Tests de comportement:
