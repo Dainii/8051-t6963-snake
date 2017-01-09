@@ -1,4 +1,5 @@
 #include "test.h"
+#include <string.h>
 
 #define BUFFER_SIZE 250
 
@@ -28,7 +29,7 @@ void BUFFER_in(char c) {
  * @return Le caractère.
  */
 char BUFFER_out() {
-	char c = buffer[out]:
+	char c = buffer[out];
 	out ++;
 	return c;
 }
@@ -47,14 +48,15 @@ int testBufferOneAndThreeChar() {
 	int testsInError = 0;
 
 	BUFFER_in(1);
-	testsInError += assertEquals(1, BUFFER_out(), "BF_01");
+	testsInError += assertEquals(BUFFER_out(), 1, "BF_01");
 
 	BUFFER_in(20);
 	BUFFER_in(30);
 	BUFFER_in(40);
-	testsInError += assertEquals(20, BUFFER_out(), "BF_02");
-	testsInError += assertEquals(30, BUFFER_out(), "BF_03");
-	testsInError += assertEquals(40, BUFFER_out(), "BF_03");
+   
+	testsInError += assertEquals(BUFFER_out(), 20, "BF_02");
+	testsInError += assertEquals(BUFFER_out(), 30, "BF_03");
+	testsInError += assertEquals(BUFFER_out(), 40, "BF_03");
 
 	return testsInError;
 }
@@ -66,7 +68,7 @@ int testBufferClear() {
 	BUFFER_in(15);
 	BUFFER_clear();
 	BUFFER_in(16);
-	testsInError += assertEquals(16, BUFFER_out(), "BFC_01");
+	testsInError += assertEquals(BUFFER_out(), 16, "BFC_01");
 
 	return testsInError;
 }
