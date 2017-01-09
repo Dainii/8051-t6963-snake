@@ -18,39 +18,23 @@
  * si aucune touche est enfoncée.
  */
 Arrow KEYBOARD_readArrows(unsigned char *keyboard) {
-	unsigned char i;
-
-	Arrow a = ARROW_NEUTRAL;
-
-	for (i = 0; i < 4; i++)
-	{
-		switch (keyboard[i]) {
-			case KEY_8 :
-				a = ARROW_UP;
-				break;
-
-			case KEY_4 :
-				a = ARROW_LEFT;
-				break;
-
-			case KEY_6 :
-				a = ARROW_RIGHT;
-				break;
-
-			case KEY_2 :
-				a = ARROW_DOWN;
-				break;
-
-			default: 
-				a = ARROW_NEUTRAL;
-		}
-
-		if (a != ARROW_NEUTRAL){
-			break;
-		}
+	if (keyboard[0] == KEY_8){
+	   return ARROW_UP;
+	}
+	
+	if (keyboard[1] == KEY_4){
+	   return ARROW_LEFT;
+	}
+	
+	if (keyboard[1] == KEY_6){
+	   return ARROW_RIGHT;
+	}
+	
+	if (keyboard[2] == KEY_2){
+	   return ARROW_DOWN;
 	}
 
-	return a;
+	return ARROW_NEUTRAL;
 }
 
 #ifdef TEST
