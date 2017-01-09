@@ -12,7 +12,31 @@
  * @param snake La description du serpent.
  */
 void SNAKE_move(Snake *snake) {
-	// À faire
+	// Garde en mémoire l'ancienne position
+	BUFFER_in(snake->position->x);
+	BUFFER_in(snake->position->y);
+
+	// Modifie en fonction de la direction du snake
+	switch (snake->direction) {
+		case MOVES_UP :
+			snake->position->y--;
+			break;
+
+		case MOVES_DOWN :
+			snake->position->y++;
+			break;
+
+		case MOVES_LEFT :
+			snake->position->x--;
+			break;
+
+		case MOVES_RIGHT :
+			snake->position->x++;
+			break;
+
+		default: 
+			snake->position = {10,10};
+	}
 }
 
 /**
@@ -23,7 +47,19 @@ void SNAKE_move(Snake *snake) {
 void SNAKE_liveOrDie(Snake *snake) {
 	unsigned char c = T6963C_readFrom(snake->position.x, snake->position.y);
 
-	// À faire.
+	switch (c) {
+		case EMPTY
+			snake->status = ALIVE;
+			break;
+
+		case FRUIT :
+			snake->status = EATING;
+			snake->caloriesLeft += FRUIT_CALORIES;
+			break;
+
+		default: 
+			snake->status = DEAD;
+	}
 }
 
 /**
@@ -31,7 +67,11 @@ void SNAKE_liveOrDie(Snake *snake) {
  * @param snake La définition du serpent.
  */
 void SNAKE_showHead(Snake *snake) {
-	// À faire.
+	if (snake->status = DEAD){
+		T6963C_writeAt(snake->position->x, snake->position->y, SNAKE_DEAD);
+	} else {
+		T6963C_writeAt(snake->position->x, snake->position->y, SNAKE_HEAD);
+	}
 }
 
 /**
@@ -40,7 +80,27 @@ void SNAKE_showHead(Snake *snake) {
  * @param snake La définition du serpent.
  */
 void SNAKE_showBody(Snake *snake) {
-	// À faire.
+	// On commence par remplacer la tête par le caractère adéquat
+	if (snake->status = EATING){
+		T6963C_writeAt(snake->position->x, snake->position->y, SNAKE_SWALLOW);
+	} else {
+		T6963C_writeAt(snake->position->x, snake->position->y, SNAKE_BODY);
+	}
+
+	// Efface la queue
+	// N'efface pas les 5 premiers
+	static int round = 0;
+
+	if (round => snake->caloriesLeft){
+		// Si c'était un fruit
+		if (T6963C_readFrom(snake->position.x, snake->position.y) = SNAKE_SWALLOW){
+			T6963C_writeAt(BUFFER_out(), BUFFER_out(), SNAKE_BODY);
+		} else {
+			T6963C_writeAt(BUFFER_out(), BUFFER_out(), EMPTY);
+		}
+	}
+
+	round ++;
 }
 
 /**
@@ -50,7 +110,34 @@ void SNAKE_showBody(Snake *snake) {
  * @param arrow La direction désirée.
  */
 void SNAKE_turn(Snake *snake, Arrow arrow) {
-	// À faire.
+	switch (arrow) {
+		case ARROW_RIGHT :
+			if (snake.direction != MOVES_LEFT){
+				snake->direction = MOVES_RIGHT;
+			}
+			break;
+
+		case ARROW_LEFT :
+			if (snake.direction != MOVES_RIGHT){
+				snake->direction = MOVES_LEFT;
+			}
+			break;
+
+		case ARROW_UP :
+			if (snake.direction != MOVES_DOWN){
+				snake->direction = MOVES_UP;
+			}
+			break;
+
+		case ARROW_DOWN :
+			if (snake.direction != MOVES_UP){
+				snake->direction = MOVES_DOWN;
+			}
+			break;
+
+		default: 
+			break;
+	}
 }
 
 /**

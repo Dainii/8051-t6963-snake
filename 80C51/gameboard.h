@@ -8,7 +8,6 @@ int testGameboard();
 #define CHAR_BASE 0x80
 #endif
 
-
 #define EMPTY 0x00
 
 #define OBSTACLE_A (0x21 + CHAR_BASE)
