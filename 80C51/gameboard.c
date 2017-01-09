@@ -47,7 +47,47 @@ void GMB_initialize() {
  * @param x1, y1: Coordonnées de l'angle inférieur gauche.
  */
 void GMB_draw(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1) {
-	// À faire
+	unsigned char x, y;
+
+	// Première ligne
+	// Coin supérieur droit
+	T6963C_writeAt(x0, y0, OBSTACLE_C);
+
+	// Coin supérieur gauche
+	T6963C_writeAt(x1, y0, OBSTACLE_A);
+
+	// Le reste de la ligne
+	for (x = x1 + 1, x < x0, x++){
+		T6963C_writeAt(x, y0, OBSTACLE_B);
+	}
+
+
+	// Dernière ligne
+	// Coin inférieur droit
+	T6963C_writeAt(x0, y1, OBSTACLE_H);
+
+	// Coin inférieur gauche
+	T6963C_writeAt(x1, y1, OBSTACLE_F);
+
+	// Le reste de la ligne
+	for (x = x1 + 1, x < x0, x++){
+		T6963C_writeAt(x, y1, OBSTACLE_G);
+	}
+
+
+	// Le reste de l'écran
+	for (y = y0 + 1, y < y1, y++){
+		// Premier caratère
+		T6963C_writeAt(x1, y, OBSTACLE_D);
+
+		// Dernier caratère
+		T6963C_writeAt(x0, y, OBSTACLE_E);
+
+		// Reste de la ligne
+		for(x = x1 + 1, x < x0, x++){
+			T6963C_writeAt(x, y, EMPTY);
+		}
+	}
 }
 
 /**
@@ -57,7 +97,31 @@ void GMB_draw(unsigned char x0, unsigned char y0, unsigned char x1, unsigned cha
  * @param x1, y1: Coordonnées de l'angle inférieur gauche.
  */
 void GMB_clear(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1) {
-	// À faire.
+	unsigned char x, y;
+
+	// Première ligne
+	for (x = x1, x <= x0, x++){
+		T6963C_writeAt(x, y0, ".");
+	}
+
+	// Dernière ligne
+	for (x = x1, x <= x0, x++){
+		T6963C_writeAt(x, y1, ".");
+	}
+
+	// Le reste de l'écran
+	for (y = y0 + 1, y < y1, y++){
+		// Premier caratère
+		T6963C_writeAt(x1, y, ".");
+
+		// Dernier caratère
+		T6963C_writeAt(x0, y, ".");
+
+		// Reste de la ligne
+		for(x = x1 + 1, x < x0, x++){
+			T6963C_writeAt(x, y, EMPTY);
+		}
+	}
 }
 
 /**
@@ -68,7 +132,51 @@ void GMB_clear(unsigned char x0, unsigned char y0, unsigned char x1, unsigned ch
  * @param text Le texte à afficher.
  */
 void GMB_display(unsigned char x0, unsigned char y0, char *text) {
-	// À faire.
+	unsigned char x;
+	unsigned char longueurTexte = strlen(text);
+	unsigned char x1 = x0 - longueurTexte - 1;
+	unsigned char y1 = y0 + 2;
+
+	// Première ligne
+	// Coin supérieur droit
+	T6963C_writeAt(x0, y0, OBSTACLE_C);
+
+	// Coin supérieur gauche
+	T6963C_writeAt(x1, y0, OBSTACLE_A);
+
+	// Le reste de la ligne
+	for (x = x1 + 1, x < x0, x++){
+		T6963C_writeAt(x, y0, OBSTACLE_B);
+	}
+
+
+	// Dernière ligne
+	// Coin inférieur droit
+	T6963C_writeAt(x0, y1, OBSTACLE_H);
+
+	// Coin inférieur gauche
+	T6963C_writeAt(x1, y1, OBSTACLE_F);
+
+	// Le reste de la ligne
+	for (x = x1 + 1, x < x0, x++){
+		T6963C_writeAt(x, y1, OBSTACLE_G);
+	}
+
+
+	// Le reste de l'écran
+	// Premier caratère
+	T6963C_writeAt(x1, y0 + 1, OBSTACLE_D);
+
+	// Dernier caratère
+	T6963C_writeAt(x0, y0 + 1, OBSTACLE_E);
+
+	// Imprime le texte
+	for (x = x1 + 1, x < x0, x++){
+		static int i = 0;
+		T6963C_writeAt(x, y0 + 1, text[i]);
+		i ++;
+	}
+
 }
 
 #ifdef TEST
