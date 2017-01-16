@@ -15,14 +15,26 @@
  */
 void FRUIT_placeInFreeSpace(Position *position) {
    char c = T6963C_readFrom(position->x, position->y);
-   
-   if(c != EMPTY){
-      position->x = rand_interval(SNAKE_LIMIT_X0,SNAKE_LIMIT_X1);
-      FRUIT_placeInFreeSpace(position);
-   }
-   
-   T6963C_writeAt(position->x, position->y, FRUIT);
 
+   if(c != EMPTY){
+      if (T6963C_readFrom(position->x+1, position->y) == EMPTY){
+	 position->x++;
+      } else if (T6963C_readFrom(position->x-1, position->y) == EMPTY){
+	 position->x--;
+      } else if (T6963C_readFrom(position->x, position->y+1) == EMPTY){
+	 position->y++;
+      } else if (T6963C_readFrom(position->x, position->y-1) == EMPTY){
+	 position->y--;
+      } else {
+	 FRUIT_random(position);
+	 FRUIT_placeInFreeSpace(position);
+      }
+      
+      T6963C_writeAt(position->x, position->y, FRUIT);
+      
+   } else {
+      T6963C_writeAt(position->x, position->y, FRUIT); 
+   }
 }
 
 /**
