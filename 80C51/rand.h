@@ -4,7 +4,7 @@
 unsigned char rand_interval(int min, int max);
 
 #ifdef TEST
-
+int testRand();
 #endif
 
 #endif

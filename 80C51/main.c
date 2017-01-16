@@ -7,6 +7,7 @@
 #include "keyboard.h"
 #include "fruit.h"
 #include "gameboard.h"
+#include "rand.h"
 
 // Snake-0
 
@@ -58,6 +59,7 @@ void main(void) {
 	testsInError += testKeyboard();
 	testsInError += testFruit();
 	testsInError += testGameboard();
+	testsInError += testRand();
 
 	printf("%d tests en erreur", testsInError);
 
